@@ -8,6 +8,11 @@ Installation:
 pip3 install gym-minigrid
 
 .................................................................................................................................................................................................................
+## Frozen Lake
+### Non Slippery
+https://camo.githubusercontent.com/44aef3df7601ce1cf4c15a0102e6c71e7b493e357fabc4516d79c131f8d98f4b/68747470733a2f2f692e696d6775722e636f6d2f526c4a6a695a4d2e676966
+### Slippery
+https://camo.githubusercontent.com/6563199d5b9013227895919ac489dd33cb312c0e1678e0e879c9374cc1044e63/68747470733a2f2f692e696d6775722e636f6d2f396446343476742e676966
 
 ## Minigrid 
 ### Results

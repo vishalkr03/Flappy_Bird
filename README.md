@@ -16,6 +16,9 @@ pip3 install gym-minigrid
 ![Slippery](https://github.com/vishalkr03/Flappy_Bird/assets/136220227/0edd8c83-2741-43ab-ae11-b3acd2ca2f9c)
 
 ## Minigrid 
+![Minigrid](https://github.com/vishalkr03/Flappy_Bird/assets/136220227/4db46d9d-ff48-4a59-9891-1e3294fdf0d9)
+
+
 ### Results
 ![sarsalambda02](https://github.com/vishalkr03/MiniGridEmptyRoom/assets/136220227/6653391a-d7d2-48c6-bcf9-f5ffa583ce58)
 ![sarsalambda01](https://github.com/vishalkr03/MiniGridEmptyRoom/assets/136220227/b9863896-2d36-46b7-852f-d94aec06d10b)

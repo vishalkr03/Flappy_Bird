@@ -9,7 +9,7 @@ pip3 install gym-minigrid
 
 .................................................................................................................................................................................................................
 
-##Minigrid 
+## Minigrid 
 ### Results
 ![sarsalambda02](https://github.com/vishalkr03/MiniGridEmptyRoom/assets/136220227/6653391a-d7d2-48c6-bcf9-f5ffa583ce58)
 ![sarsalambda01](https://github.com/vishalkr03/MiniGridEmptyRoom/assets/136220227/b9863896-2d36-46b7-852f-d94aec06d10b)

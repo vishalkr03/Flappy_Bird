@@ -1,13 +1,5 @@
 # Flappy_Bird
 
-
-MiniGridEmptyRoom
-
-Installation:
-
-pip3 install gym-minigrid
-
-.................................................................................................................................................................................................................
 ## Frozen Lake
 ### Non Slippery
 ![Non-Slippery](https://github.com/vishalkr03/Flappy_Bird/assets/136220227/70c71322-a590-437b-b21b-5ced2ef76e9f)
@@ -16,6 +8,14 @@ pip3 install gym-minigrid
 ![Slippery](https://github.com/vishalkr03/Flappy_Bird/assets/136220227/0edd8c83-2741-43ab-ae11-b3acd2ca2f9c)
 
 ## Minigrid 
+
+MiniGridEmptyRoom
+
+Installation:
+
+pip3 install gym-minigrid
+
+.................................................................................................................................................................................................................
 ![Minigrid](https://github.com/vishalkr03/Flappy_Bird/assets/136220227/4db46d9d-ff48-4a59-9891-1e3294fdf0d9)
 
 

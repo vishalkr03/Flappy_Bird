@@ -25,16 +25,19 @@ This library can be installed by using keyword "pip install (library)".
 
   ### Action Space
   
-  There are 4 actions for every state that agent can take,
-  - Left - 0
-  - Down - 1
-  - Right - 2
-  - Up - 3
+**ACTION SPACE**
 
-  ### Reward
-  
-  - There are no rewards on any state except Terminal state
-  - Terminal state has 1 reward.
+  The action space consists of 4 actions -
+
+	  LEFT - 0
+	  DOWN - 1
+	  RIGHT- 2
+	  UP   - 3
+
+**REWARD FUNCTION**
+
+  * +1 if the agent reaches the goal cell.
+  * 0 otherwise.
 
 ## Algorithms
 Here Dynamic Programming method is used for convergence of policy.
@@ -87,11 +90,11 @@ To run this environment, you need to have the following libraries installed:
   	- 3 = Up
 - Obseravtion contain iamge array which can be used to identify where the agent is in environment.
 
-### Action Space
-There are three action agent can take to change state or direction,
-- 0 = Turn Left
-- 1 = Turn Right
-- 2 = Move Forward
+**Action Space**
+
+	Turn LEFT - 0
+	Turn Right - 1
+	Move Forward - 2
 
 ### Rewards
 - Every state has 0 reward except at terminal state
@@ -150,9 +153,9 @@ To run this environment, you need to have the following libraries installed:
 
 ### Reward
 
-- There is +1 reward at every step agent take
-- At passing every pipe, reward is +5
-- When Crashed reward will be -10.
+- There is - reward at every step agent take
+- At passing every pipe, reward is -
+- When Crashed reward will be -
 
 ## Algorithm
 
@@ -160,7 +163,7 @@ Flappy Bird Environment is solved by Q-Learning Environment.
 
 ## Results
 
-(To be uploaded)
+
 
 ## Graphs
 

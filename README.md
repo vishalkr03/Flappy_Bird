@@ -81,8 +81,8 @@ To run this environment, you need to have the following libraries installed:
 ## Environment Description
 
 ### State Space
-- There are 16 states in MiniGrid-Empty-6x6-v0 environment and each state is represented by (x,y) where x = 1 to 4 and y = 1 to 4 
-- And there are 36 states in MiniGrid-Empty-8x8-v0 environment and each cell is represented by (x,y) where x = 1 to 6 and y = 1 to 6
+- There are 64 states in MiniGrid-Empty-6x6-v0 environment and each state is represented by (x,y) where x = 1 to 4 , y = 1 to 4 and 4 directions.
+- And there are 144 states in MiniGrid-Empty-8x8-v0 environment and each cell is represented by (x,y) where x = 1 to 6 , y = 1 to 6 and 4 directions.
 - State space also contain the direction of the agent at that state, the direction are as follows,
   	- 0 = Right 
   	- 1 = Down

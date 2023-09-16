@@ -1,4 +1,4 @@
-# Frozen Lake Environment
+# Flappy Bird
 
 #### Created in [Frozen-Lake](https://github.com/RaviAgrawal-1824/Assignment-1-Frozen-Lake) environment.
 

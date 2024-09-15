@@ -1,199 +1,198 @@
-import time
+
 import random
-import pygame
-import flappy_bird_gym
+import time
 import numpy as np
+import pygame
 import matplotlib.pyplot as plt
-env = flappy_bird_gym.make("FlappyBird-v0")
+import flappy_bird_gym
+env = flappy_bird_gym.make("FlappyBird-v0",pipe_gap=150)
 
-obs = env.reset()
-
-#Q Learning Algorithm is usedhere
-
-def epsilon_greedy(epsilon,state_space):
-    if np.random.rand() < epsilon:
-        action = np.random.randint(0,2)
-    else:
-        action = np.argmax(Q[state_space])
-    return action
-
-# for calculating Simple Moving Average
-def calculate_SMA(data,size_of_window):                
-    SMA = []
-    for i in range(len(data)):
-        if i < size_of_window:
-            SMA.append(np.mean(data[:i+1]))
-        else:
-            SMA.append(np.mean(data[i-size_of_window+1 : i+1]))
-    return SMA           
-
-Q = {}
-
-'''DEFINING HYPERPARAMETER'''
-number_of_episodes = 500000
-epsilon = 1
+b=0
+prev_hfp=0.00
 alpha = 0.4
-gamma = 0.9
-reward = 0
+gamma = 0.95
+ne = 500000
+action_value = {}
+reward_func = []
+score_func = []
+epi = []
+nS = 3000
+Score = 0
+nop = 0
+prev_Score = 0
+prev_nop=0
+max_steps =10000
+
+'''
+num_height_bins = nS
+num_distance_bins = nS
 
 
-reward_function = []
-score_function = []
-test_episodes =[]
-test_rew_episode = []
-test_scores = []
-ToTal_Episodes = []
+min_height, max_height = -0.22, 0.55
+min_distance, max_distance = 0.0,1.8 ''' 
+
+mv_size = 1000
+#Calculating simple moving average
+def sma(array, mv_size):
+    moving_averages = []
+    for i in range(len(array) - mv_size + 1):
+        window = array[i:i + mv_size]
+        avg = np.mean(window)
+        moving_averages.append(avg)
+
+    return moving_averages
+
+'''def discretize_state(height, distance):
+    height_bin = int((height - min_height) / (max_height - min_height) * num_height_bins)
+    distance_bin = int((distance - min_distance) / (max_distance - min_distance) * num_distance_bins)
 
 
-for i in range(number_of_episodes+5000):
+    height_bin = np.clip(height_bin, 0, num_height_bins - 1)
+    distance_bin = np.clip(distance_bin, 0, num_distance_bins - 1)
+
+    return distance_bin, height_bin'''
+
+
+
+
+for i in range(ne):
+    e = (-1*i/ne) + 1
     obs = env.reset()
+    n_steps = 0
+    rew = 0
+
     
-    state_space = (obs[0],obs[1])
+  
+    #env.render()
     done = False
-    policy = []
 
-    re_per_episd = 0
-    sc_per_episd = 0
-    test_rew = 0
-    scores_in_test = 0
-
-    steps_bird = 1
-    max_steps_of_bird = 0
-    prev_score = 0
-    if i%5000==0:
-        print(f'{i} - episode')
-    if i > number_of_episodes:
-        print(f'{i} - episode') 
+    
+    
     while not done:
+       
         
-        
-        if state_space not in Q:
-            Q[state_space] = np.zeros(2,dtype=float)
+        x= obs[0]
+        y= obs[1]
+        state = tuple((x,y))     
+        #print(state)
+        if state not in action_value:
+            action_value[state] =[0.0,0.0]
 
-        action = epsilon_greedy(epsilon,state_space)
-        policy.append(action)
-        obs2, reward, done, info = env.step(action)    
-        new_state_space = (obs2[0],obs2[1])
+        if np.random.uniform(0,1) < e :
+            action = random.randint(0,1)
+        else:
+            action = np.argmax(action_value.get(state))
+            # print(action)    
+
+        next_obs, reward, done,info = env.step(action)
+        reward = 0
+        #Updating reward
+        nop = info['score']
+        if info['score'] > prev_nop:
+            reward += 1
+
+        if done:
+            reward -=0.6
+
+        if b < nop:
+            b=nop
+
+
+        x1= next_obs[0]
+        y1= next_obs[1]  
+
+        nextstate = tuple((x1,y1))  
+
+        if nextstate not in action_value:
+            action_value[nextstate] = [0.0,0.0]
+   
+        prev_nop = nop
+        
+
+        action_value[state][action] += alpha * (reward + gamma*np.max(action_value[nextstate]) - action_value[state][action])
+
+    
+        state = nextstate
+        obs = next_obs
+
+        rew += reward
+        n_steps += 1
+        if done or max_steps == n_steps:
+            break 
+    if i%10000 == 0:
+        print(i)
+    reward_func.append(rew)
+    score_func.append(nop)
+    epi.append(i)
+    if i == 100000 or i==300000 or i == 500000: 
+        plt.title("Flappy_Bird-v0 Using Q-Learning Algorithm")
+        plt.xlabel("Number of Episodes")
+        plt.ylabel("Rewards")
+        plt.plot(epi,reward_func)
+        plt.plot(sma(epi,mv_size),sma(reward_func,mv_size))
+        plt.show()
+
+        plt.title("Flappy_Bird-v0 Using Q-Learning Algorithm")
+        plt.xlabel("Number of Episodes")
+        plt.ylabel("Score")
+        plt.plot(epi,score_func)
+        plt.plot(sma(epi,mv_size),sma(score_func,mv_size))
+        plt.show()   
+print(b)
+
+
+
+score_func2 = []
+reward_func2 = []
+note = []
+max_steps =20000
+mv_size = 50
+
+for i in range(1000):
+    rew=0
+    obs = env.reset()
+    score = 0
+    x= obs[0]
+    y= obs[1]    
+    state = tuple((x,y))   
+
+    while True:
+        #env.render()
+        if state in action_value:
+            action = np.argmax(action_value.get(state))
+
+        next_obs, reward, done,info = env.step(action)
+
+        x= next_obs[0]
+        y= next_obs[1]    
+        nextstate = tuple((x,y)) 
+        state = nextstate
         score = info['score']
-        if prev_score < score:
-            reward = reward + 5
-          
-
-
-        if new_state_space not in Q:
-            Q[new_state_space] = np.zeros(2,dtype=float)
-
-        maxof_next_action = np.argmax(Q[new_state_space])
         
-        re_per_episd += reward
-        sc_per_episd += score
-        if i > number_of_episodes:
-            test_rew += reward
-            scores_in_test += score
-            
-
-
-        Q[state_space][action] = Q[state_space][action] + alpha * (reward + gamma*(Q[new_state_space][maxof_next_action]) - Q[state_space][action])
-        state_space = new_state_space
-        epsilon = ((-i)/number_of_episodes) + 1
-        prev_info = info
-        steps_bird += 1
-        if done: 
-            env.reset()
-
-        if max_steps_of_bird == 1000:
+        rew += reward
+        if done or score == 300:
+            #print("Crashed")
             break
 
-        max_steps_of_bird += 1 
+    print("Score:",score)
+    reward_func2.append(rew)
+    score_func2.append(score)
+    note.append(i)
 
 
-
-    if i > number_of_episodes:
-        test_episodes.append(i-number_of_episodes)
-        test_rew_episode.append(test_rew)
-        test_scores.append(scores_in_test)
-        
-    
-    score_function.append(sc_per_episd)
-    reward_function.append(re_per_episd)  
-    ToTal_Episodes.append(i)    
-
-
-
-plt.figure(figsize=(12,6))
-
-SMA_window_size = 100
-
-SMA_reward = calculate_SMA(reward_function,SMA_window_size)
-# Plot the reward_function and its SMA
-plt.subplot(2,2,1)
-plt.plot(ToTal_Episodes, reward_function, label='Rewards')
-plt.plot(ToTal_Episodes, SMA_reward, label=f'SimpleMovingAvg(wind_size-{SMA_window_size})')
-plt.title('FlappyBird-v0 using Q-Learning')
-plt.xlabel('no of episodes')
-plt.ylabel('Rewards')
-plt.legend()
-
-
-SMA_score = calculate_SMA(score_function,SMA_window_size)
-# Plot the score_function and its SMA
-plt.subplot(2,2,2)
-plt.plot(ToTal_Episodes,score_function,label='Scores')
-plt.plot(ToTal_Episodes,SMA_score,label=f'SimpleMovingAvg(wind_size-{SMA_window_size})')
-plt.title('FlappyBird-v0 using Q-Learning')
-plt.xlabel('no of episodes')
-plt.ylabel('Scores')
-plt.legend()
-
-
-SMA_test_rewards = calculate_SMA(test_rew_episode,SMA_window_size)
-# Plot the rewards in test episode and its SMA
-plt.subplot(2,2,3)
-plt.plot(test_episodes,test_rew_episode,label='TestRewards')
-plt.plot(test_episodes,SMA_test_rewards,label=f'SimpleMovingAvg(wind_size-{SMA_window_size})')
-plt.title('FlappyBird-v0 using Q-Learning')
-plt.xlabel('No. of Test episodes')
-plt.ylabel('Test rewards')
-plt.legend()
-
-
-SMA_test_scores = calculate_SMA(test_scores,SMA_window_size)
-# Plot the scores in test episode and its SMA
-plt.subplot(2,2,4)
-plt.plot(test_episodes,test_scores,label='TestScores')
-plt.plot(test_episodes,SMA_test_scores,label=f'SimpleMovingAvg(wind_size-{SMA_window_size})')
-plt.title('FlappyBird-v0 using Q-Learning')
-plt.xlabel('No. of Test episodes')
-plt.ylabel('Test Scores')
-plt.legend()
-
-plt.tight_layout()
-
+plt.title("Flappy_Bird-v0 Using Q-Learning Algorithm")
+plt.xlabel("Number of Test Episodes")
+plt.ylabel("Rewards")
+plt.plot(note,reward_func2)
+plt.plot(sma(note,mv_size),sma(reward_func2,mv_size))
 plt.show()
 
-for i in range(1):
-    
-    obs = env.reset()
-    state_s = (obs[0],obs[1])
-    done=False
-    score=0
-    while not done:
-        env.render()
-        if state_s in Q:
-            action = np.argmax(Q[state_s])
-        else:
-            print('random')
-            action = random.randint(0,1)    
-        n_obs, rew, done,info = env.step(action)
-        n_state_s = (n_obs[0],n_obs[1])
-        time.sleep(1/30)
-        state_s = n_state_s
-        score = info['score']
-        if done:
-            print('damaged')
-            break
-print(score)
+plt.title("Flappy_Bird-v0 Using Q-Learning Algorithm")
+plt.xlabel("Number of Test Episodes")
+plt.ylabel("Score")
+plt.plot(note,score_func2)
+plt.plot(sma(note,mv_size),sma(score_func2,mv_size))
+plt.show()
 
 
-
-env.close()
+env.close()        

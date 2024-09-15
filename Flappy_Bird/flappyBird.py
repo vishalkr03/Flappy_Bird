@@ -85,14 +85,14 @@ for i in range(ne):
             # print(action)    
 
         next_obs, reward, done,info = env.step(action)
-        reward = 0
+        reward = 1
         #Updating reward
         nop = info['score']
         if info['score'] > prev_nop:
-            reward += 1
+            reward += 5
 
         if done:
-            reward -=0.6
+            reward -=10
 
         if b < nop:
             b=nop
